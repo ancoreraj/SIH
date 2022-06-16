@@ -1,12 +1,13 @@
 import React from 'react';
-import { Routes, Route } from "react-router-dom";
+import Login from './components/Login';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Page1 />} />
-      <Route path="/suggest" element={<Page2 />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Login />
+    </>
   );
 }
 
