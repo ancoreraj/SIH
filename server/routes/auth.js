@@ -15,8 +15,7 @@ router.get("/protected", ensureAuth, (req, res) => {
 
 router.post("/register", async (req, res) => {
     try {
-        const { email, password } = req.body;
-        
+        const { email, password, isAdmin } = req.body;
         if (!email || !password)  {
             return res.status(422).json({ error: "please add all the fields" });
         }
@@ -30,10 +29,10 @@ router.post("/register", async (req, res) => {
         const salt = await bcrypt.genSalt(12);
         const hashedpassword = await bcrypt.hash(password, salt);
 
-      
         const newUser = new User({
             email,
             password: hashedpassword,
+            isAdmin
         });
 
         newUser.save();

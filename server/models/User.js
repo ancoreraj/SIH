@@ -17,8 +17,15 @@ const userSchema = new mongoose.Schema({
     qualification: {
         type: String,
     },
+    isAdmin: {
+        type: Boolean,
+        required: true
+    },
     pinCode: {
         type: Number,
+    },
+    state: {
+        type: String,
     },
     password: {
         type: String,
