@@ -6,21 +6,23 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const ensureAuth = require("./../middleware/requireLoginJwt");
+
+// all routes here are starting with /auth
+
 router.get("/protected", ensureAuth, (req, res) => {
     res.send("Hello world");
 });
 
 router.post("/register", async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { email, password } = req.body;
         
-        if (!email || !password || !name) {
+        if (!email || !password)  {
             return res.status(422).json({ error: "please add all the fields" });
         }
         const savedUser = await User.findOne({ email });
 
       
-
         if (savedUser) {
             return res.status(422).json({ error: "Email already exists" });
         }
@@ -32,14 +34,13 @@ router.post("/register", async (req, res) => {
         const newUser = new User({
             email,
             password: hashedpassword,
-            name,
         });
 
         newUser.save();
-        res.json({ message: "Registered!" });
+        res.status(201).json({ message: "Registered!" });
 
     } catch (err) {
-        res.json(err);
+        res.status(500).json(err);
     }
 });
 
@@ -59,7 +60,7 @@ router.post("/login", async (req, res) => {
 
         if (passwordDoMatch) {
             const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-            res.json({
+            return res.json({
                 message: "User successfully signin",
                 token,
                 user: savedUser,
@@ -69,7 +70,7 @@ router.post("/login", async (req, res) => {
         }
 
     } catch (err) {
-        res.json(err);
+        res.status(500).json(err);
 
     }
 
