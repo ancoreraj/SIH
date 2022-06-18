@@ -5,16 +5,17 @@ import { Box } from '@mui/system'
 import pmImg from './assets/img/pm.jpg'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import KeyIcon from '@mui/icons-material/Key';
 import { useState } from 'react'
 
-const Login = () => {
+const SignUp = () => {
 
     const [showPassowrd, setShowPassowrd] = useState(false);
-    const [formErrors, setFormErrors] = useState({ });
-
+    const [formErrors, setFormErrors] = useState({});
     const [values, setValues] = useState({
         email: '',
-        password: ''
+        password: '',
+        confirm: '',
     });
 
     const handleChange = (e) => {
@@ -24,7 +25,6 @@ const Login = () => {
             [e.target.name]: e.target.value
         })
     }
-
 
     const validate = (values) => {
         const errors = {};
@@ -41,6 +41,12 @@ const Login = () => {
         } else if (values.password.length > 15) {
             errors.password = "Password must contain 6-15 characters.";
         }
+        
+        if (!values.confirm) {
+            errors.confirm = "Password is required.";
+        }else if (values.password !== values.confirm) {
+            errors.confirm = "Passwords do not match.";
+        }
         return errors
     };
 
@@ -48,10 +54,10 @@ const Login = () => {
         const errors = validate(values);
         setFormErrors(errors)
         if (Object.keys(errors).length === 0) {
-            
-            // console.log(values);
+
+            console.log(values);
             // Code for the API call
-            
+
         }
     }
 
@@ -68,48 +74,81 @@ const Login = () => {
                     }}
                 />
             </Grid>
-            <Grid container item direction='column' alignItems='center' justifyContent='center' xs={12} md={4}>
-                <Box sx={{ height: '100%', maxWidth: '100%', minWidth: '320px', padding: '4rem 0' }}>
+            <Grid container item direction='column'
+                alignItems='center' justifyContent='center'
+                xs={12} md={4}
+            >
+                <Box sx={{ height: '100%', maxWidth: '100%', minWidth: '320px', padding: '3rem 0' }}>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 5 }}>
-                        <Typography variant='h4'>Login</Typography>
+                        <Typography variant='h4'>Sign Up</Typography>
                     </Box>
 
-                    <form autoComplete='off'>
+                    <form>
                         <Box sx={{ my: 2 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                                 <EmailOutlinedIcon sx={{ mr: 2 }} />
                                 <TextField
-                                    error={Boolean(formErrors.email)} helperText={formErrors.email}
-                                    name='email' onChange={handleChange} value={values.email}
-                                    variant='outlined' size='small'
-                                    type='email' label='Email' fullWidth
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    error={Boolean(formErrors.email)}
+                                    helperText={formErrors.email}
+                                    name='email'
+                                    variant='outlined'
+                                    size='small'
+                                    type='email'
+                                    label='Email'
+                                    fullWidth
                                 />
                             </Box>
 
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                                 <LockOutlinedIcon sx={{ mr: 2 }} />
                                 <TextField
-                                    helperText={formErrors.password} error={Boolean(formErrors.password)}
-                                    value={values.password} name='password' onChange={handleChange}
-                                    type={showPassowrd ? 'text' : 'password'} label='Password'
-                                    variant='outlined' size='small' fullWidth
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    error={Boolean(formErrors.password)}
+                                    helperText={formErrors.password}
+                                    name='password'
+                                    type={showPassowrd ? 'text' : 'password'}
+                                    label='Password'
+                                    variant='outlined'
+                                    size='small'
+                                    fullWidth
                                 />
                             </Box>
-                            <FormGroup sx={{ mb: 3 }}>
+
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                <KeyIcon sx={{ mr: 2 }} />
+                                <TextField
+                                    value={values.confirm}
+                                    onChange={handleChange}
+                                    error={Boolean(formErrors.confirm)}
+                                    helperText={formErrors.confirm}
+                                    name='confirm'
+                                    type={showPassowrd ? 'text' : 'password'}
+                                    label='Confirm'
+                                    variant='outlined'
+                                    size='small'
+                                    fullWidth
+                                />
+                            </Box>
+
+                            <FormGroup sx={{ mb: 4 }}>
                                 <FormControlLabel
                                     control={<Checkbox checked={showPassowrd} onChange={e => { setShowPassowrd(!showPassowrd) }} />}
                                     label={<Typography variant='body2'>Show Password</Typography>}
                                 />
                             </FormGroup>
+
                         </Box>
-                        <Button onClick={handleSubmit} variant='contained' sx={{ mb: 2 }} color='primary' fullWidth>Login</Button>
+                        <Button onClick={handleSubmit} variant='contained' sx={{ mb: 2 }} color='primary' fullWidth>Sign Up</Button>
                     </form>
-                    <Typography variant='caption'>Don't have an account? <LinkRouter to='/signup' style={{
+                    <Typography variant='caption'>Already have an account? <LinkRouter to='/' style={{
                         textDecoration: 'none',
                         color: '#1976d2'
-                    }}>Sign Up</LinkRouter></Typography>
+                    }}>Sign In</LinkRouter></Typography>
 
                 </Box>
             </Grid>
@@ -117,4 +156,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default SignUp

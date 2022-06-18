@@ -10,6 +10,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: "center",
+  minHeight: '60px',
   [theme.breakpoints.up('sm')]: {
     margin: "0 3rem"
   }
@@ -32,7 +33,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 const Navbar = () => {
 
   const [menu, setMenu] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
 
   return (
@@ -41,7 +42,8 @@ const Navbar = () => {
         <Typography variant='h5'>SiteName</Typography>
         {!isLogin ? (
           <Button
-            variant='contained'
+            variant='text'
+            sx={{ backgroundColor: '#e3f2fd', '&:hover': { background: "#bbdefb" } }}
             onClick={e => setIsLogin(!isLogin)}
           >
             Sign Up
@@ -54,10 +56,11 @@ const Navbar = () => {
               </Badge>
               <UserBox>
                 <Avatar
-                  src='https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg'
                   sx={{ width: 35, height: 35 }}
                   onClick={e => setMenu(true)}
-                />
+                >
+                  M
+                </Avatar>
                 <Menu
                   id='positioned-menu'
                   aria-labelledby='positioned-menu'
@@ -73,7 +76,7 @@ const Navbar = () => {
                   }}
                 >
                   <MenuItem><AccountCircleRoundedIcon fontSize="small" sx={{ mr: 2 }} />Profile</MenuItem>
-                  <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />Settings</MenuItem>
+                  <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />Dashboard</MenuItem>
                   <Divider />
                   <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />Logout</MenuItem>
                 </Menu>
