@@ -5,6 +5,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { Box } from '@mui/system';
 import { Notifications } from '@mui/icons-material';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -76,9 +77,13 @@ const Navbar = () => {
                   }}
                 >
                   <MenuItem><AccountCircleRoundedIcon fontSize="small" sx={{ mr: 2 }} />Profile</MenuItem>
-                  <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />Dashboard</MenuItem>
+                  <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />
+                    <Link style={{ color: 'inherit', textDecoration: 'none' }} to='dashboard'>Dashboard</Link>
+                  </MenuItem>
                   <Divider />
-                  <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />Logout</MenuItem>
+                  <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />
+                    <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/'>Logout</Link>
+                  </MenuItem>
                 </Menu>
               </UserBox>
             </Icons>
