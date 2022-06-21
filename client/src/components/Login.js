@@ -7,10 +7,29 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useState } from 'react'
 
+
+const validate = (values) => {
+    const errors = {};
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    if (!values.email) {
+        errors.email = "Email is required.";
+    } else if (!regex.test(values.email)) {
+        errors.email = "Not a valid email address.";
+    }
+    if (!values.password) {
+        errors.password = "Password is required.";
+    } else if (values.password.length < 6) {
+        errors.password = "Password must contain 6-15 characters.";
+    } else if (values.password.length > 15) {
+        errors.password = "Password must contain 6-15 characters.";
+    }
+    return errors;
+};
+
 const Login = () => {
 
     const [showPassowrd, setShowPassowrd] = useState(false);
-    const [formErrors, setFormErrors] = useState({ });
+    const [formErrors, setFormErrors] = useState({});
 
     const [values, setValues] = useState({
         email: '',
@@ -25,33 +44,14 @@ const Login = () => {
         })
     }
 
-
-    const validate = (values) => {
-        const errors = {};
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-        if (!values.email) {
-            errors.email = "Email is required.";
-        } else if (!regex.test(values.email)) {
-            errors.email = "Not a valid email address.";
-        }
-        if (!values.password) {
-            errors.password = "Password is required.";
-        } else if (values.password.length < 6) {
-            errors.password = "Password must contain 6-15 characters.";
-        } else if (values.password.length > 15) {
-            errors.password = "Password must contain 6-15 characters.";
-        }
-        return errors
-    };
-
     const handleSubmit = () => {
         const errors = validate(values);
         setFormErrors(errors)
         if (Object.keys(errors).length === 0) {
-            
+
             // console.log(values);
             // Code for the API call
-            
+
         }
     }
 
