@@ -1,12 +1,22 @@
 import React from 'react';
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import Navbar from './components/Navbar';
+import SignUp from './components/SignUp';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Page1 />} />
-      <Route path="/suggest" element={<Page2 />} />
-    </Routes>
+    <>
+      <BrowserRouter >
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/signup' element={<SignUp />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter >
+    </>
   );
 }
 
