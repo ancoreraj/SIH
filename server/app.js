@@ -33,7 +33,6 @@ require("./models/State");
 //Requiring routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
-app.use("/buildProfile", require("./routes/buildProfile"));
 
 const PORT = process.env.PORT || 5000;
 
