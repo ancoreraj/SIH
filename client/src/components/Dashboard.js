@@ -124,7 +124,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Box gap={0} sx={{ display: 'flex', justifyContent: "center", background: "#eeeeee", p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: "center", background: "#eeeeee", py: 1 }}>
         <StyledBox elevation={1}>
           <Typography sx={{ mt: 2, mb: 1 }} variant='h6' textTransform='uppercase' >
             Filters

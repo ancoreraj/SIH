@@ -1,27 +1,20 @@
-import { Box, Button, Container, FormHelperText, Grid, MenuItem, Paper, styled, TextField, Typography } from '@mui/material'
+import { Box, Button, FormHelperText, Grid, MenuItem, Paper, styled, TextField, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useState } from 'react';
+import registerImg from './assets/img/register.png';
 
 const BackgroundBox = styled(Box)(({ theme }) => ({
     display: "flex",
-    background: '#eee',
-    justifyContent: 'center',
     minHeight: "calc(100vh - 69px)",
-    p: 5
 }))
-// const StyledSelect = styled(Select)(({ theme }) => ({
-//     minWidth: 290,
-//     [theme.breakpoints.down('lg')]: {
-//         minWidth: 220
-//     },
-//     [theme.breakpoints.down('md')]: {
-//         minWidth: 150
-//     },
-// }))
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
+    maxWidth: 200,
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: 300
+    },
     '& label.Mui-focused': {
         color: '#7b1fa2',
     },
@@ -45,13 +38,13 @@ const validate = (firstName, lastName, qualification, pinCode, date) => {
 
     if (!firstName) {
         errors.firstName = 'Enter First name';
-    } else if (!NameRegex.test(firstName)) {
+    } else if (!NameRegex.test(firstName.trim())) {
         errors.firstName = `First Name can't contain numbers and special characters`;
     }
 
     if (!lastName) {
         errors.lastName = 'Enter Last name';
-    } else if (!NameRegex.test(lastName)) {
+    } else if (!NameRegex.test(lastName.trim())) {
         errors.lastName = `Last Name can't contain numbers and special characters`;
     }
 
@@ -111,106 +104,64 @@ const BuildProfile = () => {
 
     return (
         <BackgroundBox>
-            <Container component={Paper} elevation={3} sx={{ m: 1, p: 4 }}>
-                <Box sx={{ mb: 4 }}>
-                    <Typography variant='h4' sx={{ mb: 1, color: "#212121" }}>Your Profile</Typography>
-                    <Typography variant='subtitle1' sx={{ color: '#7b1fa2' }}>Complete your profile to continue.</Typography>
-                </Box>
-
-                <Grid sx={{ mb: 3 }} container gap={2}>
-                    <Grid item md={5} xs={12}>
-                        <StyledTextField value={firstName} error={Boolean(formErrors.firstName)} helperText={formErrors.firstName} onChange={e => { setFirstName(e.target.value) }} fullWidth label='First Name' />
-                    </Grid>
-                    <Grid item md={5} xs={12}>
-                        <StyledTextField value={lastName} error={Boolean(formErrors.lastName)} helperText={formErrors.lastName} onChange={e => { setLastName(e.target.value) }} fullWidth label='Last Name' />
-                    </Grid>
+            <Grid container>
+                <Grid container item xs={12} lg={8} md={7} sx={{ px: 0 }}>
+                    <img src={registerImg} alt="pm"
+                        style={{
+                            width: '100%',
+                            maxHeight: '645px',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
+                    />
                 </Grid>
-
-                <Grid sx={{ mb: 3 }} container>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            label="Birth Date"
-                            inputFormat="dd-MM-yyyy"
-                            value={date}
-                            onChange={newDate => { setDate(newDate) }}
-                            openTo="year"
-                            views={['year', 'month', 'day']}
-                            renderInput={(params) => <TextField sx={{ minWidth: "300px" }} {...params} />}
-                        />
-                        <Grid container>
-                            <FormHelperText sx={{ color: '#d32f2f' }}>{formErrors.date}</FormHelperText>
-                        </Grid>
-                    </LocalizationProvider>
-                </Grid>
-
-                {/* <Typography variant='body1' color={'#424242'} sx={{ mb: 1, color: '#7b1fa2' }}>Birth Date</Typography> */}
-
-                {/* <Grid container gap={2} sx={{ mb: 4 }}>
-                    <Grid item xs={3}>
-                        <StyledTextField fullWidth name='day' error={Boolean(formErrors.day)} helperText={formErrors.day} onChange={handleDate} value={date.day} label="Day" />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <FormControl>
-                            <InputLabel id="monthlabel">Month</InputLabel>
-                            <StyledSelect
-                                labelId='monthlabel'
-                                name='month'
-                                defaultValue={""}
-                                value={date.month}
-                                label="Month"
-                                MenuProps={MenuProps}
-                                onChange={handleDate}
-                                error={Boolean(formErrors.month)}
+                <Grid container item xs={12} lg={4} md={5}>
+                    <Box component={Paper} elevation={3} sx={{ minHeight: '100%', px: 6, width: "100%" }}>
+                        <Box sx={{ py: 4 }}>
+                            <Box sx={{ mb: 5 }}>
+                                <Typography variant='h4' sx={{ mb: 1, color: "#212121" }}>Your Profile</Typography>
+                                <Typography variant='subtitle1' sx={{ color: '#7b1fa2' }}>Complete your profile to continue.</Typography>
+                            </Box>
+                            <StyledTextField sx={{ mr: 2, mb: 3 }} size='small' value={firstName} error={Boolean(formErrors.firstName)} helperText={formErrors.firstName} onChange={e => { setFirstName(e.target.value) }} fullWidth label='First Name' />
+                            <StyledTextField sx={{ mb: 2 }} size='small' value={lastName} error={Boolean(formErrors.lastName)} helperText={formErrors.lastName} onChange={e => { setLastName(e.target.value) }} fullWidth label='Last Name' />
+                            <br />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Birth Date"
+                                    inputFormat="dd-MM-yyyy"
+                                    value={date}
+                                    onChange={newDate => { setDate(newDate) }}
+                                    openTo="year"
+                                    views={['year', 'month', 'day']}
+                                    renderInput={(params) => <TextField size='small' sx={{ minWidth: "300px" }} {...params} />}
+                                />
+                                <FormHelperText sx={{ color: '#d32f2f', mb: 3 }}>{formErrors.date}</FormHelperText>
+                            </LocalizationProvider>
+                            <StyledTextField
+                                fullWidth
+                                select
+                                sx={{ minWidth: "300px", mb: 3 }}
+                                size='small'
+                                value={qualification}
+                                label="Qualification"
+                                onChange={e => { setQualification(e.target.value) }}
+                                helperText={formErrors.qualification}
+                                error={Boolean(formErrors.qualification)}
                             >
-                                <MenuItem value={'01'}>January</MenuItem>
-                                <MenuItem value={'02'}>February</MenuItem>
-                                <MenuItem value={'03'}>March</MenuItem>
-                                <MenuItem value={'04'}>April</MenuItem>
-                                <MenuItem value={'05'}>May</MenuItem>
-                                <MenuItem value={'06'}>June</MenuItem>
-                                <MenuItem value={'07'}>July</MenuItem>
-                                <MenuItem value={'08'}>August</MenuItem>
-                                <MenuItem value={'09'}>September</MenuItem>
-                                <MenuItem value={'10'}>October</MenuItem>
-                                <MenuItem value={'11'}>November</MenuItem>
-                                <MenuItem value={'12'}>December</MenuItem>
-                            </StyledSelect>
-                            <FormHelperText sx={{ color: '#d32f2f' }}>{formErrors.month}</FormHelperText>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={6} sm={3}>
-                        <StyledTextField fullWidth name='year' error={Boolean(formErrors.year)} helperText={formErrors.year} onChange={handleDate} value={date.year} label="Year" />
-                    </Grid>
-                </Grid> */}
-
-
-
-                <Grid sx={{ mb: 3 }} container gap={2}>
-
-                    <Grid item md={5} xs={12}>
-                        <StyledTextField
-                            fullWidth
-                            select
-                            value={qualification}
-                            label="Qualification"
-                            onChange={e => { setQualification(e.target.value) }}
-                            helperText={formErrors.qualification}
-                            error={Boolean(formErrors.qualification)}
-                        >
-                            <MenuItem value="10th Pass">10th Pass</MenuItem>
-                            <MenuItem value="12th Pass">12th Pass</MenuItem>
-                            <MenuItem value="Graduate">Graduate</MenuItem>
-                            <MenuItem value="Post Graduate">Post Graduate</MenuItem>
-                        </StyledTextField>
-                    </Grid>
-                    <Grid item xs={12} md={5}>
-                        <StyledTextField value={pinCode} error={Boolean(formErrors.pinCode)} helperText={formErrors.pinCode} onChange={e => { setPinCode(e.target.value) }} fullWidth sx={{ mb: 3 }} label='PIN Code' />
-                    </Grid>
+                                <MenuItem value="10th Pass">10th Pass</MenuItem>
+                                <MenuItem value="12th Pass">12th Pass</MenuItem>
+                                <MenuItem value="Graduate">Graduate</MenuItem>
+                                <MenuItem value="Post Graduate">Post Graduate</MenuItem>
+                            </StyledTextField>
+                            <br />
+                            <StyledTextField sx={{ minWidth: "300px", mb: 4 }} size='small' value={pinCode} error={Boolean(formErrors.pinCode)} helperText={formErrors.pinCode} onChange={e => { setPinCode(e.target.value) }} label='PIN Code' />
+                            <br />
+                            <Button onClick={handleSubmit} sx={{ minWidth: 100, mr: 3, background: "#7b1fa2", "&:hover": { background: "#ab47bc" } }} size='large' variant='contained'>Let's Go</Button>
+                            <Button onClick={handleClear} sx={{ minWidth: 100 }} size='large' variant='outlined' color='error'>Clear</Button>
+                        </Box>
+                    </ Box>
                 </Grid>
-                <Button onClick={handleSubmit} sx={{ minWidth: 100, mr: 3, background: "#7b1fa2", "&:hover": { background: "#ab47bc" } }} size='large' variant='contained'>Let's Go</Button>
-                <Button onClick={handleClear} sx={{ minWidth: 100 }} size='large' variant='outlined' color='error'>Clear</Button>
-
-            </ Container>
+            </Grid>
         </ BackgroundBox >
     )
 }
