@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema({
     lastName: {
         type: String,
     },
+    organizationName: {
+        type: String,
+    },
     dateOfBirth: {
         type: Date,
     },
@@ -31,6 +34,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    jobs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Jobs',
+        default: []
+    }]
 },
     {
         timestamps: true,
