@@ -1,11 +1,15 @@
 const express = require("express");
-const router = express.Router();
-const User = require("./../models/User");
+const axios = require("axios");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const User = require("./../models/User");
+const State = require("./../models/State");
 const ensureAuth = require("./../middleware/requireLoginJwt");
+
+const router = express.Router();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // all routes here are starting with /auth
 
@@ -15,7 +19,7 @@ router.get("/protected", ensureAuth, (req, res) => {
 
 router.post("/register", async (req, res) => {
     try {
-        const { email, password, isAdmin } = req.body;
+        const { email, password, isAdmin, organizationName } = req.body;
         if (!email || !password)  {
             return res.status(422).json({ error: "please add all the fields" });
         }
@@ -32,10 +36,15 @@ router.post("/register", async (req, res) => {
         const newUser = new User({
             email,
             password: hashedpassword,
-            isAdmin
+            isAdmin,
+            organizationName
         });
 
-        newUser.save();
+        newUser.save((err)=> {
+            if(err){
+                return res.status(500).json({ message: "Mongo Error"})
+            }
+        });
         res.status(201).json({ message: "Registered!" });
 
     } catch (err) {
@@ -73,6 +82,57 @@ router.post("/login", async (req, res) => {
 
     }
 
+});
+
+router.post("/build-profile", ensureAuth, async (req, res) => {
+    try {
+        const { firstName, lastName, dateOfBirth, qualification, pincode } = req.body;
+        
+        if (!firstName || !lastName || !dateOfBirth || !qualification || !pincode)  {
+            return res.status(422).json({ error: "please add all the fields" });
+        }
+        
+        const savedUser = req.user;
+
+        if(savedUser.isAdmin){
+            return res.status(403).json({error: "registered user dont have access to build profile"})
+        }
+
+        const pincodeData = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`)
+
+        const stateName = pincodeData.data[0].PostOffice[0].State;
+
+        const searchState = await State.findOne({stateName})
+        let newState
+        if(searchState){
+            searchState.noOfApplicants++;
+            searchState.save()
+        }else{
+            newState = new State({
+                stateName,
+                noOfApplicants: 1
+            })
+            newState.save()
+        }
+
+
+        savedUser.firstName = firstName;
+        savedUser.lastName = lastName;
+        savedUser.dateOfBirth = dateOfBirth;
+        savedUser.qualification = qualification;
+        savedUser.pincode = pincode;
+        savedUser.state = stateName
+
+        savedUser.save((err)=>{
+            if(err){
+                return res.status(500).json({ message: "Mongo Error"})
+            }
+        });
+        res.status(201).json({ message: "Profile Updated!" });
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
 module.exports = router;

@@ -29,11 +29,12 @@ mongoose.connection.on("error", (err) => {
 
 require("./models/User");
 require("./models/State");
+require("./models/Jobs");
 
 //Requiring routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
-app.use("/buildProfile", require("./routes/buildProfile"));
+app.use("/jobs", require("./routes/jobs"));
 
 const PORT = process.env.PORT || 5000;
 
