@@ -1,15 +1,9 @@
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Paper, Select, styled, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, FormHelperText, Grid, MenuItem, Paper, styled, TextField, Typography } from '@mui/material'
+import { format } from 'date-fns'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useState } from 'react';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 4;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4 + ITEM_PADDING_TOP,
-        },
-    }
-};
 const BackgroundBox = styled(Box)(({ theme }) => ({
     display: "flex",
     background: '#eee',
@@ -17,15 +11,15 @@ const BackgroundBox = styled(Box)(({ theme }) => ({
     minHeight: "calc(100vh - 69px)",
     p: 5
 }))
-const StyledSelect = styled(Select)(({ theme }) => ({
-    minWidth: 290,
-    [theme.breakpoints.down('lg')]: {
-        minWidth: 220
-    },
-    [theme.breakpoints.down('md')]: {
-        minWidth: 150
-    },
-}))
+// const StyledSelect = styled(Select)(({ theme }) => ({
+//     minWidth: 290,
+//     [theme.breakpoints.down('lg')]: {
+//         minWidth: 220
+//     },
+//     [theme.breakpoints.down('md')]: {
+//         minWidth: 150
+//     },
+// }))
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
     '& label.Mui-focused': {
@@ -44,48 +38,76 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     },
 }))
 
-// const validate = (values) => {
-//     const errors = {};
-//     const regexName = "/^[a-z,.'-]+$/i";
-//     const regexPinCode = "^[0-9]{5}(?:-[0-9]{4})?$";
-//     const regexDay = "([1-9]|[12]\d|3[01])";
+const validate = (firstName, lastName, qualification, pinCode, date) => {
+    const errors = {};
+    const NameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    const pinCodeRegex = /^[1-9]{1}[0-9]{5}$/
 
-//     if (!values.email) {
-//         errors.email = "Email is required.";
-//     } else if (!regex.test(values.email)) {
-//         errors.email = "Not a valid email address.";
-//     }
-//     if (!values.password) {
-//         errors.password = "Password is required.";
-//     } else if (values.password.length < 6) {
-//         errors.password = "Password must contain 6-15 characters.";
-//     } else if (values.password.length > 15) {
-//         errors.password = "Password must contain 6-15 characters.";
-//     }
-//     return errors;
-// };
+    if (!firstName) {
+        errors.firstName = 'Enter First name';
+    } else if (!NameRegex.test(firstName)) {
+        errors.firstName = `First Name can't contain numbers and special characters`;
+    }
+
+    if (!lastName) {
+        errors.lastName = 'Enter Last name';
+    } else if (!NameRegex.test(lastName)) {
+        errors.lastName = `Last Name can't contain numbers and special characters`;
+    }
+
+    if (date == null) {
+        errors.date = "Select your Birth Date"
+    }
+
+    if (!qualification) {
+        errors.qualification = 'Select your Qualification';
+    }
+
+    if (!pinCode) {
+        errors.pinCode = 'Enter a valid Pin Code';
+    } else if (!pinCodeRegex.test(pinCode)) {
+        errors.pinCode = 'Enter a valid Pin Code';
+    }
+
+    return errors;
+};
 
 const BuildProfile = () => {
 
-    const [date, setDate] = useState({
-        day: "",
-        month: "",
-        year: ""
-    });
+    const [date, setDate] = useState(null);
     const [qualification, setQualification] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [pinCode, setPinCode] = useState("");
     const [formErrors, setFormErrors] = useState({});
 
-
-    const handleDate = (e) => {
-        setDate({
-            ...date,
-            [e.target.name]: e.target.value
-        })
+    const handleClear = () => {
+        setDate(null);
+        setQualification("");
+        setFirstName("");
+        setLastName("");
+        setPinCode("");
+        setFormErrors({});
     }
 
+    const handleSubmit = () => {
+        const errors = validate(firstName, lastName, qualification, pinCode, date);
+        setFormErrors(errors);
+
+        if (Object.keys(errors).length === 0) {
+
+            const apiData = {
+                firstName,
+                lastName,
+                qualification,
+                pinCode,
+                date: format(date, "dd-MM-yyyy")
+            }
+
+            console.log(apiData)
+
+        }
+    }
 
     return (
         <BackgroundBox>
@@ -97,18 +119,35 @@ const BuildProfile = () => {
 
                 <Grid sx={{ mb: 3 }} container gap={2}>
                     <Grid item md={5} xs={12}>
-                        <StyledTextField value={firstName} onChange={e => { setFirstName(e.target.value) }} fullWidth label='First Name' />
+                        <StyledTextField value={firstName} error={Boolean(formErrors.firstName)} helperText={formErrors.firstName} onChange={e => { setFirstName(e.target.value) }} fullWidth label='First Name' />
                     </Grid>
                     <Grid item md={5} xs={12}>
-                        <StyledTextField value={lastName} onChange={e => { setLastName(e.target.value) }} fullWidth label='Last Name' />
+                        <StyledTextField value={lastName} error={Boolean(formErrors.lastName)} helperText={formErrors.lastName} onChange={e => { setLastName(e.target.value) }} fullWidth label='Last Name' />
                     </Grid>
                 </Grid>
 
-                <Typography variant='body1' color={'#424242'} sx={{ mb: 1 }}>Birth Date</Typography>
+                <Grid sx={{ mb: 3 }} container>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            label="Birth Date"
+                            inputFormat="dd-MM-yyyy"
+                            value={date}
+                            onChange={newDate => { setDate(newDate) }}
+                            openTo="year"
+                            views={['year', 'month', 'day']}
+                            renderInput={(params) => <TextField sx={{ minWidth: "300px" }} {...params} />}
+                        />
+                        <Grid container>
+                            <FormHelperText sx={{ color: '#d32f2f' }}>{formErrors.date}</FormHelperText>
+                        </Grid>
+                    </LocalizationProvider>
+                </Grid>
 
-                <Grid container gap={2} sx={{ mb: 4 }}>
+                {/* <Typography variant='body1' color={'#424242'} sx={{ mb: 1, color: '#7b1fa2' }}>Birth Date</Typography> */}
+
+                {/* <Grid container gap={2} sx={{ mb: 4 }}>
                     <Grid item xs={3}>
-                        <StyledTextField fullWidth name='day' onChange={handleDate} value={date.day} label="Day" />
+                        <StyledTextField fullWidth name='day' error={Boolean(formErrors.day)} helperText={formErrors.day} onChange={handleDate} value={date.day} label="Day" />
                     </Grid>
                     <Grid item xs={3}>
                         <FormControl>
@@ -121,26 +160,30 @@ const BuildProfile = () => {
                                 label="Month"
                                 MenuProps={MenuProps}
                                 onChange={handleDate}
+                                error={Boolean(formErrors.month)}
                             >
-                                <MenuItem value={1}>January</MenuItem>
-                                <MenuItem value={2}>February</MenuItem>
-                                <MenuItem value={3}>March</MenuItem>
-                                <MenuItem value={4}>April</MenuItem>
-                                <MenuItem value={5}>May</MenuItem>
-                                <MenuItem value={6}>June</MenuItem>
-                                <MenuItem value={7}>July</MenuItem>
-                                <MenuItem value={8}>August</MenuItem>
-                                <MenuItem value={9}>September</MenuItem>
-                                <MenuItem value={10}>October</MenuItem>
-                                <MenuItem value={11}>November</MenuItem>
-                                <MenuItem value={12}>December</MenuItem>
+                                <MenuItem value={'01'}>January</MenuItem>
+                                <MenuItem value={'02'}>February</MenuItem>
+                                <MenuItem value={'03'}>March</MenuItem>
+                                <MenuItem value={'04'}>April</MenuItem>
+                                <MenuItem value={'05'}>May</MenuItem>
+                                <MenuItem value={'06'}>June</MenuItem>
+                                <MenuItem value={'07'}>July</MenuItem>
+                                <MenuItem value={'08'}>August</MenuItem>
+                                <MenuItem value={'09'}>September</MenuItem>
+                                <MenuItem value={'10'}>October</MenuItem>
+                                <MenuItem value={'11'}>November</MenuItem>
+                                <MenuItem value={'12'}>December</MenuItem>
                             </StyledSelect>
+                            <FormHelperText sx={{ color: '#d32f2f' }}>{formErrors.month}</FormHelperText>
                         </FormControl>
                     </Grid>
                     <Grid item xs={6} sm={3}>
-                        <StyledTextField fullWidth name='year' onChange={handleDate} value={date.year} label="Year" />
+                        <StyledTextField fullWidth name='year' error={Boolean(formErrors.year)} helperText={formErrors.year} onChange={handleDate} value={date.year} label="Year" />
                     </Grid>
-                </Grid>
+                </Grid> */}
+
+
 
                 <Grid sx={{ mb: 3 }} container gap={2}>
 
@@ -151,6 +194,8 @@ const BuildProfile = () => {
                             value={qualification}
                             label="Qualification"
                             onChange={e => { setQualification(e.target.value) }}
+                            helperText={formErrors.qualification}
+                            error={Boolean(formErrors.qualification)}
                         >
                             <MenuItem value="10th Pass">10th Pass</MenuItem>
                             <MenuItem value="12th Pass">12th Pass</MenuItem>
@@ -159,11 +204,11 @@ const BuildProfile = () => {
                         </StyledTextField>
                     </Grid>
                     <Grid item xs={12} md={5}>
-                        <StyledTextField value={pinCode} onChange={e => { setPinCode(e.target.value) }} fullWidth sx={{ mb: 3 }} label='PIN Code' />
+                        <StyledTextField value={pinCode} error={Boolean(formErrors.pinCode)} helperText={formErrors.pinCode} onChange={e => { setPinCode(e.target.value) }} fullWidth sx={{ mb: 3 }} label='PIN Code' />
                     </Grid>
                 </Grid>
-                <Button sx={{ minWidth: 100, mr: 3, background: "#7b1fa2", "&:hover": { background: "#ab47bc" } }} size='large' variant='contained'>Let's Go</Button>
-                <Button sx={{ minWidth: 100 }} size='large' variant='outlined' color='error'>Clear</Button>
+                <Button onClick={handleSubmit} sx={{ minWidth: 100, mr: 3, background: "#7b1fa2", "&:hover": { background: "#ab47bc" } }} size='large' variant='contained'>Let's Go</Button>
+                <Button onClick={handleClear} sx={{ minWidth: 100 }} size='large' variant='outlined' color='error'>Clear</Button>
 
             </ Container>
         </ BackgroundBox >
