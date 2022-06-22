@@ -19,7 +19,7 @@ router.get("/protected", ensureAuth, (req, res) => {
 
 router.post("/register", async (req, res) => {
     try {
-        const { email, password, isAdmin } = req.body;
+        const { email, password, isAdmin, organizationName } = req.body;
         if (!email || !password)  {
             return res.status(422).json({ error: "please add all the fields" });
         }
@@ -36,7 +36,8 @@ router.post("/register", async (req, res) => {
         const newUser = new User({
             email,
             password: hashedpassword,
-            isAdmin
+            isAdmin,
+            organizationName
         });
 
         newUser.save((err)=> {
