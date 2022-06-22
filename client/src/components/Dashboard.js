@@ -132,7 +132,7 @@ const Dashboard = () => {
           <Divider sx={{ mb: 3 }} />
           <Box>
             <FormControl fullWidth sx={{ mb: 2, mr: 3 }}>
-              <InputLabel id="demo-select-small">Qualification</InputLabel>
+              <InputLabel>Qualification</InputLabel>
               <Select
                 value={qualification}
                 label="Qualification"
@@ -183,7 +183,7 @@ const Dashboard = () => {
 
             <StyledGrid item>
               <FormControl sx={{ mb: 2, mr: 3, minWidth: '160px' }}>
-                <InputLabel id="demo-select-small">Qualification</InputLabel>
+                <InputLabel size='small'>Qualification</InputLabel>
                 <Select
                   size='small'
                   value={qualification}
