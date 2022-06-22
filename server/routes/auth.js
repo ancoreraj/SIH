@@ -94,6 +94,10 @@ router.post("/build-profile", ensureAuth, async (req, res) => {
         
         const savedUser = req.user;
 
+        if(savedUser.isAdmin){
+            return res.status(403).json({error: "registered user dont have access to build profile"})
+        }
+
         const pincodeData = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`)
 
         const stateName = pincodeData.data[0].PostOffice[0].State;
