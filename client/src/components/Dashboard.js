@@ -5,7 +5,6 @@ import {
   Paper, TableContainer, TableHead, TableCell,
   TableRow, TableBody, Table, Box, Typography, Divider, Button, Tooltip
 } from '@mui/material'
-
 import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -64,6 +63,24 @@ const data = [
   }
 ]
 
+const StyledBox = styled(Paper)(({ theme }) => ({
+  flex: "2",
+  minHeight: "calc(100vh - 69px)",
+  padding: '0 1.5rem',
+  display: "flex",
+  flexDirection: "column",
+  [theme.breakpoints.down('md')]: {
+    display: "none",
+  }
+}))
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  display: "none",
+  [theme.breakpoints.down('md')]: {
+    display: "flex",
+  }
+}))
+
 const Dashboard = () => {
 
   const [qualification, setQualification] = useState("");
@@ -71,24 +88,6 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [jobs, setJobs] = useState([]); // to store jobs data fetched through API
   const [loading, setLoading] = useState(true);
-
-  const StyledBox = styled(Paper)(({ theme }) => ({
-    flex: "2",
-    minHeight: "calc(100vh - 69px)",
-    padding: '0 1.5rem',
-    display: "flex",
-    flexDirection: "column",
-    [theme.breakpoints.down('md')]: {
-      display: "none",
-    }
-  }))
-  const StyledGrid = styled(Grid)(({ theme }) => ({
-    display: "none",
-    [theme.breakpoints.down('md')]: {
-      display: "flex",
-    }
-  }))
-
 
   useEffect(() => {
     setLoading(true);
@@ -125,7 +124,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Box gap={0} sx={{ display: 'flex', justifyContent: "center", background: "#eeeeee", p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: "center", background: "#eeeeee", py: 1 }}>
         <StyledBox elevation={1}>
           <Typography sx={{ mt: 2, mb: 1 }} variant='h6' textTransform='uppercase' >
             Filters
@@ -133,7 +132,7 @@ const Dashboard = () => {
           <Divider sx={{ mb: 3 }} />
           <Box>
             <FormControl fullWidth sx={{ mb: 2, mr: 3 }}>
-              <InputLabel id="demo-select-small">Qualification</InputLabel>
+              <InputLabel>Qualification</InputLabel>
               <Select
                 value={qualification}
                 label="Qualification"
@@ -184,7 +183,7 @@ const Dashboard = () => {
 
             <StyledGrid item>
               <FormControl sx={{ mb: 2, mr: 3, minWidth: '160px' }}>
-                <InputLabel id="demo-select-small">Qualification</InputLabel>
+                <InputLabel size='small'>Qualification</InputLabel>
                 <Select
                   size='small'
                   value={qualification}

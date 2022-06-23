@@ -41,7 +41,7 @@ const Navbar = () => {
     <AppBar position='sticky' color='default'>
       <StyledToolbar>
         <Typography variant='h5'>SiteName</Typography>
-        
+
         {!isLogin ? (
           <Button
             variant='text'
@@ -77,16 +77,25 @@ const Navbar = () => {
                     horizontal: "right"
                   }}
                 >
-                  <MenuItem><AccountCircleRoundedIcon fontSize="small" sx={{ mr: 2 }} />
-                    <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/profile'>Profile</Link>
-                  </MenuItem>
-                  <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />
-                    <Link style={{ color: 'inherit', textDecoration: 'none' }} to='dashboard'>Dashboard</Link>
-                  </MenuItem>
+                  <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/profile'>
+                    <MenuItem><AccountCircleRoundedIcon fontSize="small" sx={{ mr: 2 }} />
+                      Profile
+                    </MenuItem>
+                  </Link>
+
+                  <Link style={{ color: 'inherit', textDecoration: 'none' }} to='dashboard'>
+                    <MenuItem><SettingsRoundedIcon fontSize="small" sx={{ mr: 2 }} />
+                      Dashboard
+                    </MenuItem>
+                  </Link>
+
                   <Divider />
-                  <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />
-                    <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/'>Logout</Link>
-                  </MenuItem>
+                  
+                  <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/'>
+                    <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />
+                      Logout
+                    </MenuItem>
+                  </Link>
                 </Menu>
               </UserBox>
             </Icons>
