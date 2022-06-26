@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
 
         newUser.save((err)=> {
             if(err){
-                return res.status(500).json({ message: "Mongo Error"})
+                return res.status(500).json({ error: "Mongo Error"})
             }
         });
         res.status(201).json({ message: "Registered!" });
