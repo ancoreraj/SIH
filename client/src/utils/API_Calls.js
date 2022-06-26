@@ -1,11 +1,13 @@
 
-const API_BASE_URL = process.env.REACT_APP_API_URL
+const API_BASE_URL = "http://localhost:5000"
 
-export const request_api_call = async (endPoint, requestMethod, data) => {
+export const request_api_call = async (endPoint, requestMethod, data=null) => {
+    const url = `${API_BASE_URL}${endPoint}`;
     const token = localStorage.getItem("token");
-    const auth_token = token ? `Bearer ${token}` : "";
-
-    const response = await fetch(endPoint, {
+    const auth_token = token ? `Token ${token}` : "";
+    data = data ? JSON.stringify(data) : data;
+  
+    const response = await fetch(url, {
         method: requestMethod,
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +21,6 @@ export const request_api_call = async (endPoint, requestMethod, data) => {
         return json;
     } else {
         const errorJson = await response.json();
-        console.log(errorJson);
         return {
             error: true,
             message: errorJson.error
@@ -27,6 +28,14 @@ export const request_api_call = async (endPoint, requestMethod, data) => {
     }
 }
 
-export const getAuthToken = (email, password) => {
-    return request_api_call("/login", "POST", {email, password});
+export const getUserData = () => {
+    return request_api_call("/auth/me", "POST");
+}
+
+export const registerUser = (authData) => {
+    return request_api_call("/auth/register", "POST", authData);
+}
+
+export const loginUser = (authData) => {
+    return request_api_call("/auth/login", "POST", authData);
 }

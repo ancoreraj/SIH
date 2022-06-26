@@ -7,6 +7,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import KeyIcon from '@mui/icons-material/Key';
 import { useState } from 'react'
+import { registerUser } from '../utils/API_Calls';
 
 
 const validate = (values) => {
@@ -51,15 +52,24 @@ const SignUp = () => {
         })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const errors = validate(values);
         setFormErrors(errors)
+
         if (Object.keys(errors).length === 0) {
-
-            console.log(values);
-            
-            // Code for the API call
-
+            const response = await registerUser({
+                email: values.email,
+                password: values.password,
+                isAdmin: false,
+                organizationName: ""
+            });
+            if(response.error) {
+                // implement error toast
+                alert(response.message);
+            } else {
+                // implement success toast
+                window.location.href = "/login";
+            }
         }
     }
 
