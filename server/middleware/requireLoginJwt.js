@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
     const token = authorization.replace("Bearer ", "")
     jwt.verify(token, JWT_SECRET, (err, payload) => {
         if (err) {
-            return res.status(401).json({ error: "Please Log in" })
+            return res.status(401).json({ error: "Invalid Token" })
         }
 
         const { _id } = payload

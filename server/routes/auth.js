@@ -84,6 +84,11 @@ router.post("/login", async (req, res) => {
 
 });
 
+// Send user data with respect to the token received
+router.post("/me", ensureAuth, async (req, res) => {
+    return res.status(200).json(req.user);
+});
+
 router.post("/build-profile", ensureAuth, async (req, res) => {
     try {
         const { firstName, lastName, dateOfBirth, qualification, pincode } = req.body;
