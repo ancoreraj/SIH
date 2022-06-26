@@ -64,7 +64,7 @@ const SignUp = () => {
     }
 
     return (
-        <Grid container sx={{ minHeight: 'calc(100vh - 69px)' }}>
+        <Grid container sx={{ minHeight: '100vh' }}>
             <Grid item xs={12} md={8}>
                 <img src={pmImg} alt="pm"
                     style={{
