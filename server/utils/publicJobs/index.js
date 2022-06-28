@@ -1,7 +1,7 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 
-const getJobs = async () => {
+const getPublicJobs = async () => {
     try {
         const url = `https://www.freejobalert.com/latest-notifications/`
         const response = await axios.get(url)
@@ -50,4 +50,4 @@ const getJobs = async () => {
     }
 }
 
-module.exports = getJobs
+module.exports = getPublicJobs
