@@ -42,7 +42,7 @@ router.post("/register", async (req, res) => {
 
         newUser.save((err)=> {
             if(err){
-                return res.status(500).json({ message: "Mongo Error"})
+                return res.status(500).json({ error: "Mongo Error"})
             }
         });
         res.status(201).json({ message: "Registered!" });
@@ -82,6 +82,11 @@ router.post("/login", async (req, res) => {
 
     }
 
+});
+
+// Send user data with respect to the token received
+router.post("/me", ensureAuth, async (req, res) => {
+    return res.status(200).json(req.user);
 });
 
 router.post("/build-profile", ensureAuth, async (req, res) => {

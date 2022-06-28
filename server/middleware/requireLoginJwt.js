@@ -8,10 +8,10 @@ module.exports = (req, res, next) => {
     if (!authorization) {
         return res.status(401).json({ error: "Please Log in" })
     }
-    const token = authorization.replace("Bearer ", "")
+    const token = authorization.replace("Token ", "")
     jwt.verify(token, JWT_SECRET, (err, payload) => {
         if (err) {
-            return res.status(401).json({ error: "Please Log in" })
+            return res.status(401).json({ error: "Invalid Token" })
         }
 
         const { _id } = payload
