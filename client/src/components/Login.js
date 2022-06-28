@@ -6,6 +6,8 @@ import pmImg from './assets/img/pm.jpg'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useState } from 'react'
+import { loginUser } from '../utils/API_Calls';
+import { useAuth } from '../context/AuthContext';
 
 
 const validate = (values) => {
@@ -27,7 +29,7 @@ const validate = (values) => {
 };
 
 const Login = () => {
-
+    const { _signInUser } = useAuth();
     const [showPassowrd, setShowPassowrd] = useState(false);
     const [formErrors, setFormErrors] = useState({});
 
@@ -44,19 +46,23 @@ const Login = () => {
         })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const errors = validate(values);
         setFormErrors(errors)
         if (Object.keys(errors).length === 0) {
-
-            // console.log(values);
-            // Code for the API call
-
+            const response = await loginUser(values); 
+            if(response.error) {
+                // implement error toast
+                alert(response.message);
+            } else {
+                _signInUser(response.token, response.user);
+                window.location.href = "/";
+            }
         }
     }
 
     return (
-        <Grid container sx={{ minHeight: 'calc(100vh - 69px)' }}>
+        <Grid container sx={{ minHeight: '100vh' }}>
             <Grid item xs={12} md={8}>
                 <img src={pmImg} alt="pm"
                     style={{
