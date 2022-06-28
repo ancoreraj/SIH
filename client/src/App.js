@@ -9,21 +9,7 @@ import { useAuth } from './context/AuthContext';
 import { getUserData } from './utils/API_Calls';
 
 function App() {
-    // const [user, setUser] = useState(null);
 
-    // useEffect(() => {
-    //     const getUser = async () => {
-    //         const response = await getUserData();
-    //         if(response.error) {
-    //             // Implement Error message Toast
-    //             // const message = response.message
-    //         } else {
-    //             setUser(response);
-    //         }
-    //     }
-
-    //     getUser();
-    // }, []);
     const { user } = useAuth();
 
     return (
