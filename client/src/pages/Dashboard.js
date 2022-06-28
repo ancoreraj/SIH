@@ -9,7 +9,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DoneIcon from '@mui/icons-material/Done';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { useState, useEffect } from 'react'
-import Row from './DataRow';
+import Row from '../components/DataRow';
 import { styled } from '@mui/material/styles'
 
 const data = [
@@ -124,9 +124,16 @@ const Dashboard = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: "center", background: "#eeeeee", py: 1 }}>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: "center",
+        background: "#eeeeee",
+        py: 1
+      }}>
         <StyledBox elevation={1}>
-          <Typography sx={{ mt: 2, mb: 1 }} variant='h6' textTransform='uppercase' >
+          <Typography sx={{ mt: 2, mb: 1 }}
+            variant='h6'
+            textTransform='uppercase' >
             Filters
           </Typography>
           <Divider sx={{ mb: 3 }} />
@@ -145,17 +152,41 @@ const Dashboard = () => {
                 <MenuItem value="Post Graduate">Post Graduate</MenuItem>
               </Select>
             </FormControl>
-            <TextField fullWidth type="text" sx={{ mb: 3 }} value={age} onChange={handleAge} label="Filter by Age" />
+            <TextField
+              fullWidth
+              type="text"
+              sx={{ mb: 3 }}
+              value={age}
+              onChange={handleAge}
+              label="Filter by Age"
+            />
 
             <Tooltip title="Apply Filters">
-              <Button onClick={handleApply} startIcon={<DoneIcon />} variant="contained" color='success' sx={{ mr: 3 }}>Apply</Button>
+              <Button
+                onClick={handleApply}
+                startIcon={<DoneIcon />}
+                variant="contained"
+                color='success'
+                sx={{ mr: 3, mb: 2 }}>
+                Apply
+              </Button>
             </Tooltip>
 
-            <Tooltip title="Clear All Filters">
-              <Button onClick={handleClear} startIcon={<ClearIcon />} variant="outlined" color='error'>Clear</Button>
+            <Tooltip title="Clear All Filters" >
+              <Button
+                sx={{ mb: 2 }}
+                onClick={handleClear}
+                startIcon={<ClearIcon />}
+                variant="outlined"
+                color='error'>
+                Clear
+              </Button>
             </Tooltip>
 
-            <Typography sx={{ mt: 4, mb: 1 }} variant='h6' textTransform='uppercase'>
+            <Typography
+              sx={{ mt: 4, mb: 1 }}
+              variant='h6'
+              textTransform='uppercase'>
               Statistics
             </Typography>
             <Divider sx={{ mb: 3 }} />

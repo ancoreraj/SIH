@@ -2,7 +2,7 @@ import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } 
 import { Link as LinkRouter } from 'react-router-dom';
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/system'
-import pmImg from './assets/img/pm.jpg'
+import pmImg from '../components/assets/img/pm.jpg'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import KeyIcon from '@mui/icons-material/Key';
@@ -63,7 +63,7 @@ const SignUp = () => {
                 isAdmin: false,
                 organizationName: ""
             });
-            if(response.error) {
+            if (response.error) {
                 // implement error toast
                 alert(response.message);
             } else {
@@ -149,19 +149,33 @@ const SignUp = () => {
 
                             <FormGroup sx={{ mb: 4 }}>
                                 <FormControlLabel
-                                    control={<Checkbox checked={showPassowrd} onChange={e => { setShowPassowrd(!showPassowrd) }} />}
+                                    control={<Checkbox checked={showPassowrd}
+                                        onChange={e => { setShowPassowrd(!showPassowrd) }}
+                                    />}
                                     label={<Typography variant='body2'>Show Password</Typography>}
                                 />
                             </FormGroup>
 
                         </Box>
-                        <Button onClick={handleSubmit} variant='contained' sx={{ mb: 2 }} color='primary' fullWidth>Sign Up</Button>
+                        <Button
+                            onClick={handleSubmit}
+                            variant='contained'
+                            sx={{ mb: 2 }}
+                            color='primary'
+                            fullWidth>
+                            Sign Up
+                        </Button>
                     </form>
-                    <Typography variant='caption'>Already have an account? <LinkRouter to='/' style={{
-                        textDecoration: 'none',
-                        color: '#1976d2'
-                    }}>Sign In</LinkRouter></Typography>
-
+                    <Typography variant='caption'>Already have an account?
+                        <LinkRouter
+                            to='/'
+                            style={{
+                                textDecoration: 'none',
+                                color: '#1976d2'
+                            }}>
+                            &nbsp;Sign In
+                        </LinkRouter>
+                    </Typography>
                 </Box>
             </Grid>
         </Grid>
