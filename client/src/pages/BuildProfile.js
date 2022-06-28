@@ -3,11 +3,11 @@ import { format } from 'date-fns'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useState } from 'react';
-import registerImg from './assets/img/register.png';
+import registerImg from '../components/assets/img/register.png';
 
 const BackgroundBox = styled(Box)(({ theme }) => ({
     display: "flex",
-    minHeight: "calc(100vh - 69px)",
+    minHeight: "100vh",
 }))
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -109,21 +109,54 @@ const BuildProfile = () => {
                     <img src={registerImg} alt="pm"
                         style={{
                             width: '100%',
-                            maxHeight: '645px',
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
                     />
                 </Grid>
                 <Grid container item xs={12} lg={4} md={5}>
-                    <Box component={Paper} elevation={3} sx={{ minHeight: '100%', px: 6, width: "100%" }}>
+                    <Box
+                        component={Paper}
+                        elevation={3}
+                        sx={{
+                            minHeight: '100%',
+                            px: 6,
+                            width: "100%"
+                        }}>
                         <Box sx={{ py: 4 }}>
                             <Box sx={{ mb: 5 }}>
-                                <Typography variant='h4' sx={{ mb: 1, color: "#212121" }}>Your Profile</Typography>
-                                <Typography variant='subtitle1' sx={{ color: '#7b1fa2' }}>Complete your profile to continue.</Typography>
+                                <Typography
+                                    variant='h4'
+                                    sx={{ mb: 1, color: "#212121" }}
+                                >
+                                    Your Profile
+                                </Typography>
+                                <Typography
+                                    variant='subtitle1'
+                                    sx={{ color: '#7b1fa2' }}>
+                                    Complete your profile to continue.
+                                </Typography>
                             </Box>
-                            <StyledTextField sx={{ mr: 2, mb: 3 }} size='small' value={firstName} error={Boolean(formErrors.firstName)} helperText={formErrors.firstName} onChange={e => { setFirstName(e.target.value) }} fullWidth label='First Name' />
-                            <StyledTextField sx={{ mb: 2 }} size='small' value={lastName} error={Boolean(formErrors.lastName)} helperText={formErrors.lastName} onChange={e => { setLastName(e.target.value) }} fullWidth label='Last Name' />
+                            <StyledTextField
+                                sx={{ mr: 2, mb: 3 }}
+                                size='small'
+                                value={firstName}
+                                error={Boolean(formErrors.firstName)}
+                                helperText={formErrors.firstName}
+                                onChange={e => { setFirstName(e.target.value) }}
+                                fullWidth
+                                label='First Name'
+                            />
+                            <StyledTextField
+                                sx={{ mb: 2 }}
+                                size='small'
+                                value={lastName}
+                                error={Boolean(formErrors.lastName)}
+                                helperText={formErrors.lastName}
+                                onChange={e => { setLastName(e.target.value) }}
+                                fullWidth
+                                label='Last Name'
+                            />
                             <br />
                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
@@ -154,10 +187,36 @@ const BuildProfile = () => {
                                 <MenuItem value="Post Graduate">Post Graduate</MenuItem>
                             </StyledTextField>
                             <br />
-                            <StyledTextField sx={{ minWidth: "300px", mb: 4 }} size='small' value={pinCode} error={Boolean(formErrors.pinCode)} helperText={formErrors.pinCode} onChange={e => { setPinCode(e.target.value) }} label='PIN Code' />
+                            <StyledTextField
+                                sx={{ minWidth: "300px", mb: 4 }}
+                                size='small'
+                                value={pinCode}
+                                error={Boolean(formErrors.pinCode)}
+                                helperText={formErrors.pinCode}
+                                onChange={e => { setPinCode(e.target.value) }}
+                                label='PIN Code'
+                            />
                             <br />
-                            <Button onClick={handleSubmit} sx={{ minWidth: 100, mr: 3, background: "#7b1fa2", "&:hover": { background: "#ab47bc" } }} size='large' variant='contained'>Let's Go</Button>
-                            <Button onClick={handleClear} sx={{ minWidth: 100 }} size='large' variant='outlined' color='error'>Clear</Button>
+                            <Button
+                                onClick={handleSubmit}
+                                sx={{
+                                    minWidth: 100,
+                                    mr: 3,
+                                    background: "#7b1fa2",
+                                    "&:hover": { background: "#ab47bc" }
+                                }}
+                                size='large'
+                                variant='contained'>
+                                Let's Go
+                            </Button>
+                            <Button
+                                onClick={handleClear}
+                                sx={{ minWidth: 100 }}
+                                size='large'
+                                variant='outlined'
+                                color='error'>
+                                Clear
+                            </Button>
                         </Box>
                     </ Box>
                 </Grid>

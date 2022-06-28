@@ -2,7 +2,7 @@ import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } 
 import { Link as LinkRouter } from 'react-router-dom';
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/system'
-import pmImg from './assets/img/pm.jpg'
+import pmImg from '../components/assets/img/pm.jpg'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useState } from 'react'
@@ -50,8 +50,8 @@ const Login = () => {
         const errors = validate(values);
         setFormErrors(errors)
         if (Object.keys(errors).length === 0) {
-            const response = await loginUser(values); 
-            if(response.error) {
+            const response = await loginUser(values);
+            if (response.error) {
                 // implement error toast
                 alert(response.message);
             } else {
@@ -105,18 +105,37 @@ const Login = () => {
                             </Box>
                             <FormGroup sx={{ mb: 3 }}>
                                 <FormControlLabel
-                                    control={<Checkbox checked={showPassowrd} onChange={e => { setShowPassowrd(!showPassowrd) }} />}
-                                    label={<Typography variant='body2'>Show Password</Typography>}
+                                    control={<Checkbox
+                                        checked={showPassowrd}
+                                        onChange={e => { setShowPassowrd(!showPassowrd) }}
+                                    />}
+                                    label={
+                                        <Typography variant='body2'>
+                                            Show Password
+                                        </Typography>
+                                    }
                                 />
                             </FormGroup>
                         </Box>
-                        <Button onClick={handleSubmit} variant='contained' sx={{ mb: 2 }} color='primary' fullWidth>Login</Button>
+                        <Button
+                            onClick={handleSubmit}
+                            variant='contained'
+                            sx={{ mb: 2 }}
+                            color='primary'
+                            fullWidth>
+                            Login
+                        </Button>
                     </form>
-                    <Typography variant='caption'>Don't have an account? <LinkRouter to='/signup' style={{
-                        textDecoration: 'none',
-                        color: '#1976d2'
-                    }}>Sign Up</LinkRouter></Typography>
-
+                    <Typography variant='caption'>
+                        Don't have an account?
+                        <LinkRouter to='/signup'
+                            style={{
+                                textDecoration: 'none',
+                                color: '#1976d2'
+                            }}>
+                            &nbsp;Sign Up
+                        </LinkRouter>
+                    </Typography>
                 </Box>
             </Grid>
         </Grid>
