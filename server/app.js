@@ -39,19 +39,17 @@ mongoose.connection.on("error", (err) => {
   console.log("err connecting", err);
 });
 
-require("./models/User");
-require("./models/State");
-require("./models/Jobs");
+require("./models/UserModel");
+require("./models/StateModel");
+require("./models/JobsModel");
 
 //Requiring routes
-app.use("/", require("./routes/index"));
-app.use("/auth", require("./routes/auth"));
-app.use("/jobs", require("./routes/jobs"));
+app.use("/", require("./routes/indexRoutes"));
+app.use("/", require("./routes/authRoutes"));
+app.use("/", require("./routes/jobsRoutes"));
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  //Running Mongoose
-  
   console.log("server is running on", PORT);
 });
