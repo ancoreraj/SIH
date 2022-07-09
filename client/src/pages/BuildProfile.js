@@ -4,6 +4,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import registerImg from '../components/assets/img/register.png';
+import { buildUserProfile } from '../utils/API_Calls';
 
 const BackgroundBox = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -83,21 +84,26 @@ const BuildProfile = () => {
         setFormErrors({});
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const errors = validate(firstName, lastName, qualification, pinCode, date);
         setFormErrors(errors);
 
         if (Object.keys(errors).length === 0) {
 
-            const apiData = {
+            const userData = {
                 firstName,
                 lastName,
+                pincode: pinCode,
                 qualification,
-                pinCode,
-                date: format(date, "dd-MM-yyyy")
+                dateOfBirth: format(date, "dd-MM-yyyy")
             }
 
-            console.log(apiData)
+            const response = await buildUserProfile(userData);
+            if(response.error) {
+                alert(response.message);
+            } else {
+                alert("Profile Updated");
+            }
 
         }
     }

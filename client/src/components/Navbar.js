@@ -6,6 +6,7 @@ import { Box } from '@mui/system';
 import { Notifications } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -31,10 +32,11 @@ const UserBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }))
 
-const Navbar = () => {
 
+
+const Navbar = () => {
+  const { user, _signOutUser } = useAuth();
   const [menu, setMenu] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
 
 
   return (
@@ -42,14 +44,13 @@ const Navbar = () => {
       <StyledToolbar>
         <Typography variant='h5'>SiteName</Typography>
 
-        {!isLogin ? (
-          <Button
-            variant='text'
+        {!user ? (
+          <Link
+            to="/login"
             sx={{ backgroundColor: '#e3f2fd', '&:hover': { background: "#bbdefb" } }}
-            onClick={e => setIsLogin(!isLogin)}
           >
-            Sign Up
-          </Button>
+            Sign In
+          </Link>
         )
           : (
             < Icons >
@@ -91,11 +92,11 @@ const Navbar = () => {
 
                   <Divider />
                   
-                  <Link style={{ color: 'inherit', textDecoration: 'none' }} to='/'>
+                  <Button style={{ color: 'inherit', textDecoration: 'none' }} onClick = {_ => _signOutUser()}>
                     <MenuItem><LogoutRoundedIcon fontSize="small" sx={{ mr: 2 }} />
                       Logout
                     </MenuItem>
-                  </Link>
+                  </Button>
                 </Menu>
               </UserBox>
             </Icons>

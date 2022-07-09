@@ -1,5 +1,7 @@
+// Login credential:- mail@google.com, test@123
 
 const API_BASE_URL = "http://localhost:5000"
+
 
 export const request_api_call = async (endPoint, requestMethod, data=null) => {
     const url = `${API_BASE_URL}${endPoint}`;
@@ -29,7 +31,7 @@ export const request_api_call = async (endPoint, requestMethod, data=null) => {
 }
 
 export const getUserData = () => {
-    return request_api_call("/auth/me", "POST");
+    return request_api_call("/auth/me", "GET");
 }
 
 export const registerUser = (authData) => {
@@ -38,4 +40,8 @@ export const registerUser = (authData) => {
 
 export const loginUser = (authData) => {
     return request_api_call("/auth/login", "POST", authData);
+}
+
+export const buildUserProfile = userData => {
+    return request_api_call("/auth/build-profile", "POST", userData);
 }

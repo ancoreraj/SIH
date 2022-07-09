@@ -7,7 +7,8 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import KeyIcon from '@mui/icons-material/Key';
 import { useState } from 'react'
-import { registerUser } from '../utils/API_Calls';
+import { loginUser, registerUser } from '../utils/API_Calls';
+import { useAuth } from '../context/AuthContext';
 
 
 const validate = (values) => {
@@ -35,7 +36,8 @@ const validate = (values) => {
 };
 
 const SignUp = () => {
-
+    const { _signInUser } = useAuth();
+    
     const [showPassowrd, setShowPassowrd] = useState(false);
     const [formErrors, setFormErrors] = useState({});
     const [values, setValues] = useState({
@@ -66,9 +68,20 @@ const SignUp = () => {
             if (response.error) {
                 // implement error toast
                 alert(response.message);
+
             } else {
+
                 // implement success toast
-                window.location.href = "/login";
+                const res = await loginUser(values);
+                if (res.error) {
+
+                    // implement error toast
+                    alert(res.message);
+                } else {
+                    
+                    _signInUser(res.token, res.user);
+                    window.location.href = "/profile";
+                }
             }
         }
     }
