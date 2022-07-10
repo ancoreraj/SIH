@@ -10,7 +10,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const findUser = async () => {
             const response = await getUserData();
-            if(response.error) return null;
+            if(response.error) setUser(null);
             else setUser(response);
         }
         findUser();

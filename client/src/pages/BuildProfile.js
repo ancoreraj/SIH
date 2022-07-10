@@ -5,6 +5,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { useState } from 'react';
 import registerImg from '../components/assets/img/register.png';
 import { buildUserProfile } from '../utils/API_Calls';
+import { useAuth } from "../context/AuthContext";
 
 const BackgroundBox = styled(Box)(({ theme }) => ({
     display: "flex",
@@ -32,7 +33,8 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     },
 }))
 
-const validate = (firstName, lastName, qualification, pinCode, date) => {
+const validate = (userProfileData) => {
+    let { firstName, lastName, dateOfBirth, qualification, pinCode } = userProfileData;
     const errors = {};
     const NameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
     const pinCodeRegex = /^[1-9]{1}[0-9]{5}$/
@@ -49,7 +51,7 @@ const validate = (firstName, lastName, qualification, pinCode, date) => {
         errors.lastName = `Last Name can't contain numbers and special characters`;
     }
 
-    if (date == null) {
+    if (dateOfBirth === null) {
         errors.date = "Select your Birth Date"
     }
 
@@ -66,38 +68,54 @@ const validate = (firstName, lastName, qualification, pinCode, date) => {
     return errors;
 };
 
-const BuildProfile = () => {
+const getFormattedDate = date => {
+    const newDate = new Date(date);
+    const dd = String(newDate.getDate()).padStart(2, '0');
+    const mm = String(newDate.getMonth() + 1).padStart(2, '0');
+    const yy = newDate.getFullYear();
 
-    const [date, setDate] = useState(null);
-    const [qualification, setQualification] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [pinCode, setPinCode] = useState("");
+    return `${dd}-${mm}-${yy}`;
+}
+
+
+const BuildProfile = () => {
+    const { user } = useAuth();
+    const [userProfileData, setUserProfileData] = useState({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: new Date(user.dateOfBirth),
+        qualification: user.qualification,
+        pinCode: user.pincode,
+        state: user.state
+    });
     const [formErrors, setFormErrors] = useState({});
 
     const handleClear = () => {
-        setDate(null);
-        setQualification("");
-        setFirstName("");
-        setLastName("");
-        setPinCode("");
+        setUserProfileData({
+            firstName: "",
+            lastName: "",
+            dateOfBirth: null,
+            qualification: "",
+            pinCode: "",
+            state: ""
+        });
         setFormErrors({});
     }
 
     const handleSubmit = async () => {
-        const errors = validate(firstName, lastName, qualification, pinCode, date);
+        const errors = validate(userProfileData);
         setFormErrors(errors);
 
         if (Object.keys(errors).length === 0) {
 
             const userData = {
-                firstName,
-                lastName,
-                pincode: pinCode,
-                qualification,
-                dateOfBirth: format(date, "dd-MM-yyyy")
+                firstName: userProfileData.firstName,
+                lastName: userProfileData.lastName,
+                pincode: userProfileData.pinCode,
+                qualification: userProfileData.qualification,
+                dateOfBirth: format(userProfileData.dateOfBirth, "dd-MM-yyyy")
             }
-
+           
             const response = await buildUserProfile(userData);
             if(response.error) {
                 alert(response.message);
@@ -146,20 +164,26 @@ const BuildProfile = () => {
                             <StyledTextField
                                 sx={{ mr: 2, mb: 3 }}
                                 size='small'
-                                value={firstName}
+                                value={userProfileData.firstName}
                                 error={Boolean(formErrors.firstName)}
                                 helperText={formErrors.firstName}
-                                onChange={e => { setFirstName(e.target.value) }}
+                                onChange={e => setUserProfileData({
+                                    ...userProfileData,
+                                    firstName: e.target.value
+                                })}
                                 fullWidth
                                 label='First Name'
                             />
                             <StyledTextField
                                 sx={{ mb: 2 }}
                                 size='small'
-                                value={lastName}
+                                value={userProfileData.lastName}
                                 error={Boolean(formErrors.lastName)}
                                 helperText={formErrors.lastName}
-                                onChange={e => { setLastName(e.target.value) }}
+                                onChange={e => setUserProfileData({
+                                    ...userProfileData,
+                                    lastName: e.target.value
+                                })}
                                 fullWidth
                                 label='Last Name'
                             />
@@ -168,8 +192,11 @@ const BuildProfile = () => {
                                 <DatePicker
                                     label="Birth Date"
                                     inputFormat="dd-MM-yyyy"
-                                    value={date}
-                                    onChange={newDate => { setDate(newDate) }}
+                                    value={userProfileData.dateOfBirth}
+                                    onChange={newDate => setUserProfileData({
+                                        ...userProfileData,
+                                        dateOfBirth: newDate
+                                    })}
                                     openTo="year"
                                     views={['year', 'month', 'day']}
                                     renderInput={(params) => <TextField size='small' sx={{ minWidth: "300px" }} {...params} />}
@@ -181,9 +208,12 @@ const BuildProfile = () => {
                                 select
                                 sx={{ minWidth: "300px", mb: 3 }}
                                 size='small'
-                                value={qualification}
+                                value={userProfileData.qualification}
                                 label="Qualification"
-                                onChange={e => { setQualification(e.target.value) }}
+                                onChange={e => setUserProfileData({
+                                    ...userProfileData,
+                                    qualification: e.target.value
+                                })}
                                 helperText={formErrors.qualification}
                                 error={Boolean(formErrors.qualification)}
                             >
@@ -196,11 +226,23 @@ const BuildProfile = () => {
                             <StyledTextField
                                 sx={{ minWidth: "300px", mb: 4 }}
                                 size='small'
-                                value={pinCode}
+                                value={userProfileData.pinCode}
                                 error={Boolean(formErrors.pinCode)}
                                 helperText={formErrors.pinCode}
-                                onChange={e => { setPinCode(e.target.value) }}
+                                onChange={e => setUserProfileData({
+                                    ...userProfileData,
+                                    pinCode: e.target.value
+                                })}
                                 label='PIN Code'
+                            />
+                            <br />
+                            <StyledTextField
+                                sx={{ minWidth: "300px", mb: 4 }}
+                                disabled
+                                size='small'
+                                value={userProfileData.state}
+                                helperText="Fetched automatically using pincode"
+                                label='State'
                             />
                             <br />
                             <Button

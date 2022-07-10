@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormControlLabel, FormGroup, TextField, Typography } from '@mui/material'
-import { Link as LinkRouter } from 'react-router-dom';
+import { Link as LinkRouter, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/system'
 import pmImg from '../components/assets/img/pm.jpg'
@@ -29,6 +29,7 @@ const validate = (values) => {
 };
 
 const Login = () => {
+    const navigate = useNavigate();
     const { _signInUser } = useAuth();
     const [showPassowrd, setShowPassowrd] = useState(false);
     const [formErrors, setFormErrors] = useState({});
@@ -56,7 +57,7 @@ const Login = () => {
                 alert(response.message);
             } else {
                 _signInUser(response.token, response.user);
-                window.location.href = "/";
+                navigate("/");
             }
         }
     }
