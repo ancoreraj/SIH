@@ -1,16 +1,20 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { getUserData } from "../utils/API_Calls";
 
-const findUser = async () => {
-    const response = await getUserData();
-    if(response.error) return null;
-    else return response;
-}
 
 export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
-    const [user, setUser] = useState(() => findUser());
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const findUser = async () => {
+            const response = await getUserData();
+            if(response.error) setUser(null);
+            else setUser(response);
+        }
+        findUser();
+    }, []);
 
     const _signInUser = (token, userData) => {
         localStorage.setItem("token", token);
@@ -22,9 +26,13 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
     }
 
-    const value = { user, _signInUser, _signOutUser };
+    const memoedValue = useMemo(() => ({
+        user,
+        _signInUser,
+        _signOutUser
+    }), [user]);
 
-    return <AuthContext.Provider value={value}>{ children }</AuthContext.Provider>
+    return <AuthContext.Provider value={memoedValue}>{ children }</AuthContext.Provider>
 }
 
 export const useAuth = () => useContext(AuthContext);
