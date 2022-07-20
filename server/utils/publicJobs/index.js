@@ -13,25 +13,25 @@ const getPublicJobs = async () => {
 
         const data = [];
 
-        const check = ({postDate, recruitmentBoard, postName, qualification, lastDate, applyLink}) => {
-            if(!postDate && !recruitmentBoard && !postName && !qualification && !lastDate && !applyLink){
+        const check = ({createdAt, organizationName, title, qualification, lastDate, applyLink}) => {
+            if(!createdAt && !organizationName && !title && !qualification && !lastDate && !applyLink){
                 return false
             }
             return true;
         }
 
         $('.lattrbord').each((i, el) => {
-            const postDate = $(el).find('.latcpb').text().replace(/\s\s+/g, '')
-            const recruitmentBoard = $(el).find('.latcr').text().replace(/\s\s+/g, '')
-            const postName = $(el).find('.latceb').text().replace(/\s\s+/g, '')
+            const createdAt = $(el).find('.latcpb').text().replace(/\s\s+/g, '')
+            const organizationName = $(el).find('.latcr').text().replace(/\s\s+/g, '')
+            const title = $(el).find('.latceb').text().replace(/\s\s+/g, '')
             const qualification = $(el).find('.latcqb').text().replace(/\s\s+/g, '')
             const lastDate = $(el).find('.latclb').text().replace(/\s\s+/g, '')
             const applyLink = $(el).find('a').attr('href')
 
             const job = {
-                postDate,
-                recruitmentBoard,
-                postName,
+                createdAt,
+                organizationName,
+                title,
                 qualification,
                 lastDate,
                 applyLink
