@@ -7,6 +7,9 @@ const jobsSchema = new mongoose.Schema({
     qualification: {
         type: String,
     },
+    organizationName: {
+        type: String,
+    },
     lastDate: {
         type: Date,
     },
@@ -17,12 +20,14 @@ const jobsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    maxAge: {
+    maxAgeToApply: {
         type: Number
     }
 },
     {
-        timestamps: true,
+        timestamps: true, 
+        //createdAt:
+        //updatedAt:
     }
 )
 
