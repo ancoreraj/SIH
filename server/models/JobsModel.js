@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const jobsSchema = new mongoose.Schema({
-    postDate: {
-        type: Date,
-        required: true
-    },
     title: {
         type: String,
     },

@@ -15,7 +15,6 @@ const createJobController = async (req, res) => {
         }
         
         const newJob = new JobsModel({
-            postDate: new Date(),
             title,
             qualification,
             lastDate,
@@ -24,7 +23,7 @@ const createJobController = async (req, res) => {
             maxAge
         })
 
-        newJob.save((err) => {
+        await newJob.save((err) => {
             if (err) {
                 return res.status(500).json({ message: "Mongo Error" })
             }
@@ -32,7 +31,7 @@ const createJobController = async (req, res) => {
 
         savedUser.jobs.push(newJob);
 
-        savedUser.save((err) => {
+        await savedUser.save((err) => {
             if (err) {
                 return res.status(500).json({ message: "Mongo Error" })
             }

@@ -30,7 +30,7 @@ const registerController = async (req, res) => {
             organizationName
         });
 
-        newUser.save((err) => {
+        await newUser.save((err) => {
             if (err) {
                 return res.status(500).json({ error: "Mongo Error" })
             }
@@ -97,13 +97,13 @@ const buildProfileController = async (req, res) => {
         let newState
         if (searchState) {
             searchState.noOfApplicants++;
-            searchState.save()
+            await searchState.save()
         } else {
             newState = new StateModel({
                 stateName,
                 noOfApplicants: 1
             })
-            newState.save()
+            await newState.save()
         }
 
 
@@ -112,9 +112,9 @@ const buildProfileController = async (req, res) => {
         savedUser.dateOfBirth = dateOfBirth;
         savedUser.qualification = qualification;
         savedUser.pincode = pincode;
-        savedUser.state = stateName
+        savedUser.state = stateName;
 
-        savedUser.save((err) => {
+        await savedUser.save((err) => {
             if (err) {
                 return res.status(500).json({ message: "Mongo Error" })
             }
