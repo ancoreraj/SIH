@@ -23,7 +23,6 @@ app.options('*', cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
@@ -33,10 +32,10 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 mongoose.connection.on("connected", () => {
-  console.log("conneted to mongo yeahh");
+  console.log("Database Connected");
 });
 mongoose.connection.on("error", (err) => {
-  console.log("err connecting", err);
+  console.log("Error in database connection", err);
 });
 
 require("./models/UserModel");

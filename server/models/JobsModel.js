@@ -20,6 +20,9 @@ const jobsSchema = new mongoose.Schema({
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    maxAge: {
+        type: Number
     }
 },
     {

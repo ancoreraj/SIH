@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    pinCode: {
+    pincode: {
         type: Number,
     },
     state: {

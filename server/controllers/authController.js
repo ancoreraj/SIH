@@ -61,7 +61,6 @@ const loginController = async (req, res) => {
             return res.json({
                 message: "User successfully signin",
                 token,
-                user: savedUser,
             });
         } else {
             return res.status(422).json({ error: "Invalid Email or password" });

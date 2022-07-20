@@ -2,25 +2,26 @@ const JobsModel = require("../models/JobsModel");
 
 const createJobController = async (req, res) => {
     try {
-        const { postDate, title, qualification, lastDate, applyLink } = req.body;
+        const { title, qualification, lastDate, applyLink, maxAge } = req.body;
 
-        if (!postDate || !title || !qualification || !lastDate || !applyLink) {
+        if (!title || !qualification || !lastDate || !applyLink || !maxAge) {
             return res.status(422).json({ error: "please add all the fields" });
         }
 
         const savedUser = req.user;
 
-        if (!savedUser.isAdmin) {
+        if (savedUser.isAdmin === false) {
             return res.status(403).json({ error: "registered user don't have access to post jobs" })
         }
-
+        
         const newJob = new JobsModel({
-            postDate,
+            postDate: new Date(),
             title,
             qualification,
             lastDate,
             applyLink,
-            postedBy: savedUser
+            postedBy: savedUser,
+            maxAge
         })
 
         newJob.save((err) => {
